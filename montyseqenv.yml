@@ -1,0 +1,8 @@
+name: monty
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - clustalw
+  - figtree
