@@ -1,22 +1,28 @@
 import argparse
 import math
 import random
+import sys
 
 import montyseqlib
 
 parser = argparse.ArgumentParser()
-parser.add_argument('iterations', type=int)
-parser.add_argument('depth', type=int)
-parser.add_argument('--err_rate', type=float, default=0.12, metavar='<float>',
-	help='sequencing error rate [%(default).2f]')
-parser.add_argument('--seed', type=int)
+parser.add_argument('iterations', type=float, metavar='<float>',
+	help='simulations to perform (e.g. 1e6')
+parser.add_argument('depth', type=int, metavar='<int>',
+	help='sequencing depth (e.g. 10)')
+parser.add_argument('--output', '-o', metavar='<file>',
+	help='output file [default is stdout]')
+parser.add_argument('--err_rate', '-e', type=float, default=0.1, 
+	metavar='<float>', help='sequencing error rate [%(default).2f]')
+parser.add_argument('--seed', type=int, metavar='<int>',
+	help='use a specific random seed [default is random]')
 arg = parser.parse_args()
 if arg.seed: random.seed(arg.seed)
 
 
 hom_count = {}
 het_count = {}
-for _ in range(arg.iterations):
+for _ in range(int(arg.iterations)):
 	# hom: mom is A (differences are sequencing error)
 	hom = {'A':0, 'C':0, 'G':0, 'T':0}
 	for i in range(arg.depth):
@@ -47,8 +53,11 @@ for _ in range(arg.iterations):
 	if sig not in het_count: het_count[sig] = 0
 	het_count[sig] += 1
 
+if arg.output: fp = open(arg.output, 'w')
+else:          fp = sys.stdout
 
-for sig in hom_count or het_count:
+print('Counts', 'Hom', 'Het', 'P(hom)', sep='\t', file=fp)
+for sig in sorted(list(hom_count or het_count), reverse=True):
 	hom = hom_count[sig] if sig in hom_count else 0
 	het = het_count[sig] if sig in het_count else 0
-	print(sig, hom, het, hom / (hom+het), sep='\t')
+	print(sig, hom, het, hom / (hom+het), sep='\t', file=fp)
