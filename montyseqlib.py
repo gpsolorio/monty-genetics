@@ -1,5 +1,6 @@
 import random
 import sys
+import gzip
 
 def create_reads(parent, num_reads, sub_rate=0.1):
     '''Generate reads with random sequencing errors'''
