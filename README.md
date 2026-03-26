@@ -50,3 +50,23 @@ Result: At low coverage, it's difficult to determine if any column is
 homozygous or heterozygous, but as coverage increases, it gets more
 reliable.
 
+## 3. Sequencing Simulation ##
+
+Task: create a program that generates a heterozygous genome and sequencing
+reads that arise from the genome. Both parental haplotypes differ from a
+reference genome by some snp_rate and reads differ from their parental genome
+by some err_rate.
+
+Program: `seqsim.py`
+
+In progress...
+
+Generate a region that is 75 bp long, has 25 bp reads, has 10x coverage,
+snp_rate=0.01 and err_rate default (0.1)
+
+```
+python3 seqsim.py 75 25 10 -s 0.01 -r 7
+```
+
+- Which columns of the MSA are heterozygous?
+- Which reads belong to each haplotype?

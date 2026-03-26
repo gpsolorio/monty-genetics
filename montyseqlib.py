@@ -2,20 +2,36 @@ import random
 import sys
 import gzip
 
-def create_reads(parent, num_reads, sub_rate=0.1):
-    '''Generate reads with random sequencing errors'''
-    for _ in range(num_reads):
-        read = []
-        for nt in parent:
-            if random.random() > sub_rate:
-                read.append(nt)
-            else:
-                if nt == 'A': read.append(random.choice('CGT'))
-                elif nt == 'C': read.append(random.choice('AGT'))
-                elif nt == 'G': read.append(random.choice('ACT'))
-                elif nt == 'T': read.append(random.choice('AGC'))
-                else: sys.exit('Error')
-        yield ''.join(read)
+def create_variant(parent, var_rate=0.001, lower=False):
+	'''Create a duplicate sequence with random variants'''
+	if lower:
+		notA = 'cgt'
+		notC = 'agt'
+		notG = 'act'
+		notT = 'acg'
+	else:
+		notA = 'CGT'
+		notC = 'AGT'
+		notG = 'ACT'
+		notT = 'ACG'
+	seq = []
+	variants = []
+	for i, nt in enumerate(parent):
+		if random.random() < var_rate:
+			if   nt == 'A': nt = random.choice(notA)
+			elif nt == 'C': nt = random.choice(notC)
+			elif nt == 'G': nt = random.choice(notG)
+			elif nt == 'T': nt = random.choice(notT)
+			else: sys.exit('Error')
+			variants.append( (i, nt) )
+		seq.append(nt)
+	return ''.join(seq), variants
+
+def create_reads(parent, num_reads, sub_rate=0.1, lower=False):
+	'''Generate reads with random sequencing errors'''
+	for _ in range(num_reads):
+		s, v = create_variant(parent, var_rate=sub_rate, lower=lower)
+		yield s
 
 ##################
 ## File Readers ##
