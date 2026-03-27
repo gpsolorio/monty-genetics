@@ -48,9 +48,9 @@ Program: `hvh.py` and `run-hvh.sh`
 
 Result: At low coverage, it's difficult to determine if any column is
 homozygous or heterozygous, but as coverage increases, it gets more
-reliable. After running `run-hvh-sh` there is a directory of `tables`
+reliable. After running `run-hvh.sh` there is a directory of `tables`
 containing all the simulations. This can be aggregated into a single
-table with `tabler.py` which is saved as `heterozygous.lut`.
+table with `tabler.py tables > heterozygous.lut`.
 
 ## 3. Sequencing Simulation ##
 
