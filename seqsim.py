@@ -30,31 +30,40 @@ if arg.randomseed: random.seed(arg.randomseed)
 arg.chromlen = int(arg.chromlen)
 arg.readlen  = int(arg.readlen)
 
+# create parental genotypes
 src = ''.join(random.choices('ACGT', k=arg.chromlen)) # reference seq
 mom, vmom = montyseqlib.create_variant(src, arg.snp_rate)
 dad, vdad = montyseqlib.create_variant(src, arg.snp_rate)
 
-reads = []
+# create sequencing reads
+reads = {} # organized by starting offset
 readn = int(arg.depth * arg.chromlen / arg.readlen)
 for _ in range(readn):
-	i = random.randint(0, arg.chromlen - arg.readlen)
+	off = random.randint(0, arg.chromlen - arg.readlen)
+	if off not in reads: reads[off] = []
 	if random.random() < 0.5:
-		reg = mom[i:i+arg.readlen]
+		reg = mom[off:off+arg.readlen]
 		s, v = montyseqlib.create_variant(reg, arg.err_rate, lower=True)
-		reads.append( (i, 'm', s ) )
+		reads[off].append( ('m', s) )
 	else:
-		reg = dad[i:i+arg.readlen]
+		reg = dad[off:off+arg.readlen]
 		s, v = montyseqlib.create_variant(reg, arg.err_rate, lower=True)
-		reads.append( (i, 'd', s) )
-reads = sorted(reads, key=lambda x: x[0])
+		reads[off].append( ('d', s) )
 
-print(' ', src)
-print(' ', mom)
-print(' ', aseq(arg.chromlen, vmom, symbol='m'))
-print(' ', dad)
-print(' ', aseq(arg.chromlen, vdad, symbol='d'))
+# display alignment
+print('R', src)
+print('M', mom)
+print('v', aseq(arg.chromlen, vmom, symbol='m'))
+print('D', dad)
+print('v', aseq(arg.chromlen, vdad, symbol='d'))
+for off, aligns in sorted(reads.items()):
+	for parent, seq in aligns:
+		head = ' ' * off
+		print(parent, ' ', head, seq, sep='')
 
-for offset, parent, seq in reads:
-	head = ' ' * offset
-	print(parent, ' ', head, seq, sep='')
-
+# decode alignments...
+# for each column of the alignment
+# count the letters and sort into decreasing order
+# look up p(het) in heterozygous.lut
+# if a column is het, label the reads as belonging to mom or dad
+# compute accuracy of labeling
