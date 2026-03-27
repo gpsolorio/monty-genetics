@@ -44,11 +44,13 @@ seen at all. The homozygous model generates this about 3304526 times in
 a billion whereas the heterozygous is 118187590. The result is that
 seeing `6.3.1` has a 2.72% chance of being homozygous.
 
-Program: `hvh.py` and `run-hvh.py`
+Program: `hvh.py` and `run-hvh.sh`
 
 Result: At low coverage, it's difficult to determine if any column is
 homozygous or heterozygous, but as coverage increases, it gets more
-reliable.
+reliable. After running `run-hvh-sh` there is a directory of `tables`
+containing all the simulations. This can be aggregated into a single
+table with `tabler.py` which is saved as `heterozygous.lut`.
 
 ## 3. Sequencing Simulation ##
 
