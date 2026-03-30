@@ -52,6 +52,10 @@ reliable. After running `run-hvh.sh` there is a directory of `tables`
 containing all the simulations. This can be aggregated into a single
 table with `tabler.py tables > heterozygous.lut`.
 
+One way to simplify the counting would be to count only the 2
+most-common observations. For example, `6.3.1` would become `6.3`. How
+much of a difference would this make?
+
 ## 3. Sequencing Simulation ##
 
 Task: create a program that generates a heterozygous genome and sequencing
