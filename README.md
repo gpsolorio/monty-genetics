@@ -44,17 +44,28 @@ seen at all. The homozygous model generates this about 3304526 times in
 a billion whereas the heterozygous is 118187590. The result is that
 seeing `6.3.1` has a 2.72% chance of being homozygous.
 
-Program: `hvh.py` and `run-hvh.sh`
+Program: `hvh.py`
 
 Result: At low coverage, it's difficult to determine if any column is
 homozygous or heterozygous, but as coverage increases, it gets more
-reliable. After running `run-hvh.sh` there is a directory of `tables`
-containing all the simulations. This can be aggregated into a single
-table with `tabler.py tables > heterozygous.lut`.
+reliable.
 
-One way to simplify the counting would be to count only the 2
-most-common observations. For example, `6.3.1` would become `6.3`. How
-much of a difference would this make?
+Alternate program: `het-vs-hom/hvh`
+
+The `het-vs-hom` directory contains a C implementation of `hvh.py`. Even though
+most of the work of `hvh.py` is random number generation, the C program is more
+than 10x faster. Simply `make` to compile.
+
+The shell script `run-hvh.sh` provides an example of how to run multiple copies
+of `hvh` at different depths in parallel using `xargs`.
+
+After running `run-hvh.sh` there is a directory of `build/tables` containing
+all the simulations. This can be aggregated into a single table with
+`tabler.py build/tables > heterozygous.lut`.
+
+One way to simplify the table would be to count only the 2 most-common
+observations. For example, `6.3.1.0` would become `6.3`. How much of a
+difference would this make?
 
 ## 3. Sequencing Simulation ##
 
