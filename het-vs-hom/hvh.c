@@ -1,3 +1,9 @@
+/****************************************************************************\
+ File: hvh.c
+ Author: Ian Korf
+ License: Public Domain
+\****************************************************************************/
+
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -5,15 +11,6 @@
 #include <unistd.h>
 #include <time.h>
 
-static char *help = "\
-usage: hvh [options] <depth>\n\
-  -i <float> iterations [0] (0 means preset iterations)\n\
-  -e <float> sequencing error rate [0.1]\n\
-  -o <file>  optional output file\n\
-  -s <int>   optional random seed\n\
-  -z         show only non-zero values\n\
-  -v         verbose\n\
-";
 
 int cmp_int(const void *a, const void *b) {
 	return *(int*)b - *(int*)a;
@@ -21,13 +18,29 @@ int cmp_int(const void *a, const void *b) {
 
 /*
 	The counting table is a sparse 3D matrix that maps to a sparser 4d matrix.
-	At a sequencing depth of 3, the following genotypes are possible:
+
+	The most common nucleotide is stored first. Then the next most common. Etc.
+	There can be at most 4 different letters. For a sequencing depth of 3,
+	there are the following possible values.
+
+	3.0.0.0
+	2.1.0.0
+	1.1.1.0
+
+	Although there are 4 possible letters, you only need to store 3: if the
+	values don't add up to the total depth, you can infer the counts of the
+	final letter. This means the matrix can be 3 dimensions instead of 4. Here
+	are all the mappings for a depth of 4.
+
 	4.0.0.0 stored as 4.0.0
 	3.1.0.0 stored as 3.1.0
 	2.1.1.0 stored as 2.1.0
 	1.1.1.1 stored as 1.1.1 -> implied 1.1.1.1 because depth must be 4
 
-	The matrix becomes increasingly sparse at higher depths.
+	The matrix becomes increasingly sparse at higher depths. While this is
+	somewhat wasteful, the memory isn't that large. However, it might be more
+	cache-able if the size was smaller. But that is a problem for another day.
+
 	Depth  Types  Matrix
 	  2       2      27
 	  3       3      64
@@ -49,6 +62,17 @@ uint32_t ***count_table(int size) {
 	}
 	return t;
 }
+
+static char *help = "\
+usage: hvh [options] <depth>\n\
+  -i <float> iterations [0] (0 means preset iterations)\n\
+  -e <float> sequencing error rate [0.1]\n\
+  -o <file>  optional output file\n\
+  -s <int>   optional random seed\n\
+  -z         show only non-zero values\n\
+  -v         verbose\n\
+";
+
 
 int main(int argc, char **argv) {
 	float iterations = 0;
