@@ -161,11 +161,11 @@ int main(int argc, char **argv) {
 				if (k > j) continue;
 				int m = depth -i -j -k;
 				if (m > k) continue;
-				int hom = homs[i][j][k];
-				int het = hets[i][j][k];
+				double hom = homs[i][j][k];
+				double het = hets[i][j][k];
 				if (skip_zeroes && (hom == 0 || het == 0)) continue;
-				fprintf(output, "%d.%d.%d.%d\t%d\t%d\t%g\n", i, j, k, m,
-					het, hom, (double)het / (double)(het + hom));
+				fprintf(output, "%d.%d.%d.%d\t%g\t%g\t%g\n", i, j, k, m,
+					het, hom, het / (het + hom));
 			}
 		}
 	}
