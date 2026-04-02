@@ -52,12 +52,12 @@ int cmp_int(const void *a, const void *b) {
 	 40     632   68921
 */
 
-uint32_t ***count_table(int size) {
-	uint32_t ***t = malloc(sizeof(uint32_t **) * size);
+uint64_t ***count_table(int size) {
+	uint64_t ***t = malloc(sizeof(uint64_t **) * size);
 	for (int i = 0; i < size; i++) {
-		t[i] = malloc(sizeof(uint32_t *) * size);
+		t[i] = malloc(sizeof(uint64_t *) * size);
 		for (int j = 0; j < size; j++) {
-			t[i][j] = calloc(sizeof(uint32_t), size);
+			t[i][j] = calloc(sizeof(uint64_t), size);
 		}
 	}
 	return t;
@@ -102,16 +102,16 @@ int main(int argc, char **argv) {
 	if (iterations == 0) {
 		iterations = 1e8 * pow(10, (double)depth/10);
 	}
-	uint32_t limit = iterations;
+	uint64_t limit = iterations;
 
 	// Create the count lists for major and minor alleles
-	uint32_t ***hets = count_table(depth +1);
-	uint32_t ***homs = count_table(depth +1);
+	uint64_t ***hets = count_table(depth +1);
+	uint64_t ***homs = count_table(depth +1);
 
 	// Homozygous
 	if (verbose) fprintf(stderr, "Homozygous simulations (%g) ", iterations);
-	uint32_t i = 0;
-	uint32_t update = limit / 20;
+	uint64_t i = 0;
+	uint64_t update = limit / 20;
 	while (1) {
 		if (verbose && i % update == 0) fprintf(stderr, ".");
 		if (i++ >= limit) break;
