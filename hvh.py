@@ -21,7 +21,6 @@ if arg.seed: random.seed(arg.seed)
 
 
 hom_count = {}
-het_count = {}
 for _ in range(int(arg.iterations)):
 	# hom: mom is A (differences are sequencing error)
 	hom = {'A':0, 'C':0, 'G':0, 'T':0}
@@ -37,6 +36,8 @@ for _ in range(int(arg.iterations)):
 	if sig not in hom_count: hom_count[sig] = 0
 	hom_count[sig] += 1
 
+het_count = {}
+for _ in range(int(arg.iterations)):
 	# het: mom is A, dad is T
 	het = {'A':0, 'C':0, 'G':0, 'T':0}
 	for i in range(arg.depth):
