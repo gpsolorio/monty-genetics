@@ -34,7 +34,7 @@ int cmp_int(const void *a, const void *b) {
 
 	4.0.0.0 stored as 4.0.0
 	3.1.0.0 stored as 3.1.0
-	2.1.1.0 stored as 2.1.0
+	2.1.1.0 stored as 2.1.1
 	1.1.1.1 stored as 1.1.1 -> implied 1.1.1.1 because depth must be 4
 
 	The matrix becomes increasingly sparse at higher depths. While this is
